@@ -11,6 +11,7 @@ class MyClient(discord.Client):
         cmds = await c.application_commands()
         bump = next((cmd for cmd in cmds if cmd.name == "bump"), None)
         print(bump)
+        await bump.__call__(channel=c)
 
 client = MyClient()
 client.run(token)
