@@ -10,7 +10,6 @@ class MyClient(discord.Client):
         g, c = self.get_guild(guild_id), self.get_guild(guild_id).get_channel(channel_id)
         cmds = await c.application_commands()
         bump = next((cmd for cmd in cmds if cmd.name == "bump"), None)
-        print(bump)
         await bump.__call__(channel=c)
         await self.close()
 
