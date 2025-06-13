@@ -12,6 +12,7 @@ class MyClient(discord.Client):
         bump = next((cmd for cmd in cmds if cmd.name == "bump"), None)
         print(bump)
         await bump.__call__(channel=c)
+        await self.close()
 
 client = MyClient()
 client.run(token)
