@@ -2,8 +2,9 @@ name: python hourly run
 
 on:
   schedule:
-    - cron: '0 * * * *'  # run at minute 0 every hour
-
+    - cron: '0 * * * *'
+  workflow_dispatch:
+  
 jobs:
   run-script:
     runs-on: ubuntu-latest
