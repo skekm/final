@@ -1,4 +1,5 @@
-import discord, asyncio, os
+import discord, asyncio, os, math, time
+from datetime import datetime, timezone
 
 token = os.getenv('TOKEN')
 guild_id = 1382434954213855352
@@ -17,10 +18,23 @@ class Client(discord.Client):
         try:
             g = await retry(self.fetch_guild, guild_id)
             c = await retry(g.fetch_channel, channel_id)
+
+            lm = [m async for m in c.history(limit=2) if m.author.bot][0]
+            lb = math.floor((datetime.now(timezone.utc) - lm.created_at).total_seconds() / 60)
+            wt = 120 - lb
+
+            if lb < 120:
+                if wt > 10:
+                    await c.send(f"cant wait: {wt} mins left")
+                    return await self.close()
+                await c.send(f"waiting: {wt} min(s)")
+                await asyncio.sleep(wt * 60)
+            
             cmds = await retry(c.application_commands)
             bump = next((cmd for cmd in cmds if cmd.name=="bump"), None)
-            if not bump: raise Exception("bump command missing")
+            if not bump: raise Exception("bump missing")
             await retry(bump.__call__, channel=c)
+
         except Exception as e:
             print(f"final fail: {e}")
         await self.close()
