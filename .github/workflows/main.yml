@@ -1,4 +1,4 @@
-name: bump-bot
+name: bumper
 
 on:
   schedule:
@@ -15,13 +15,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: restore last_run.txt
-        uses: actions/cache@v4
-        with:
-          path: last_run.txt
-          key: last-run-${{ github.run_id }}
-          restore-keys: last-run-
-
       - name: set up python
         uses: actions/setup-python@v4
         with:
@@ -32,12 +25,6 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: run bot script
-        run: python bot.py
-
-      - name: save last_run.txt
-        uses: actions/cache@v4
-        with:
-          path: last_run.txt
-          key: last-run-${{ github.run_id }}
-          restore-keys: last-run-
+      - name: run script
+        run: |
+          python bot.py
