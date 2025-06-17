@@ -1,4 +1,4 @@
-import discord, asyncio, os, time
+import discord, asyncio, os, time, sys
 
 token = os.getenv("TOKEN")
 guild_id = 1382434954213855352
@@ -7,17 +7,23 @@ timestamp_file = "last_run.txt"
 wait = 2 * 60 * 60  # 2 hours
 
 def last_run():
-    try: return int(open(timestamp_file).read())
-    except: return 0
+    try:
+        with open(timestamp_file) as f:
+            return int(f.read())
+    except:
+        return 0
 
 def save_now():
-    open(timestamp_file, "w").write(str(int(time.time())))
+    with open(timestamp_file, "w") as f:
+        f.write(str(int(time.time())))
 
 async def retry(fn, *a, **k):
     for i in range(3):
-        try: return await fn(*a, **k)
+        try:
+            return await fn(*a, **k)
         except Exception as e:
-            if i == 2: raise
+            if i == 2:
+                raise
             await asyncio.sleep(2)
 
 class Client(discord.Client):
@@ -32,7 +38,8 @@ class Client(discord.Client):
             if diff >= wait:
                 cmds = await retry(c.application_commands)
                 bump = next((cmd for cmd in cmds if cmd.name == "bump"), None)
-                if not bump: raise Exception("bump command missing")
+                if not bump:
+                    raise Exception("bump command missing")
                 await retry(bump.__call__, channel=c)
                 save_now()
                 msg = "bump done"
@@ -45,10 +52,14 @@ class Client(discord.Client):
             await retry(c.send, msg)
 
         except Exception as e:
-            try: await retry(c.send, f"error: {e}")
-            except: pass
+            try:
+                await retry(c.send, f"error: {e}")
+            except:
+                pass
 
         await self.close()
-        asyncio.get_event_loop().stop()
 
-Client().run(token)
+try:
+    Client().run(token)
+finally:
+    sys.exit(0)
