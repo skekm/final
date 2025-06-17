@@ -1,4 +1,4 @@
-import discord, asyncio, os, math, time, os
+import discord, asyncio, os, math, time, sys
 from datetime import datetime, timezone
 
 token = os.getenv('TOKEN')
