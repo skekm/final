@@ -47,6 +47,8 @@ class Client(discord.Client):
         except Exception as e:
             try: await retry(c.send, f"error: {e}")
             except: pass
+
         await self.close()
+        asyncio.get_event_loop().stop()
 
 Client().run(token)
