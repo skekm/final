@@ -1,4 +1,4 @@
-import discord, asyncio, os, math, time
+import discord, asyncio, os, math, time, os
 from datetime import datetime, timezone
 
 token = os.getenv('TOKEN')
@@ -26,7 +26,7 @@ class Client(discord.Client):
             if lb < 120:
                 if wt > 10:
                     await c.send(f"cant wait: {wt} mins left")
-                    return await self.close()
+                    sys.exit()
                 await c.send(f"waiting: {wt} min(s)")
                 await asyncio.sleep(wt * 60)
             
@@ -37,6 +37,8 @@ class Client(discord.Client):
 
         except Exception as e:
             print(f"final fail: {e}")
-        await self.close()
+        sys.exit()
+
+Client().run(token)
 
 Client().run(token)
