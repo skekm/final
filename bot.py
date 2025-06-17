@@ -49,4 +49,4 @@ class Client(discord.Client):
             except: pass
         await self.close()
 
-Client(intents=discord.Intents.default()).run(token)
+Client().run(token)
