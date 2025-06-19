@@ -4,7 +4,6 @@ from datetime import datetime, timezone
 token = os.getenv('TOKEN')
 guild_id = os.getenv('GUILD_ID')
 channel_id = os.getenv('CHANNEL_ID')
-print(guild_id, channel_id)
 
 async def retry(fn, *a, **k):
     for i in range(3):
