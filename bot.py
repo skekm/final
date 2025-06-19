@@ -2,8 +2,8 @@ import discord, asyncio, os, math, time, sys
 from datetime import datetime, timezone
 
 token = os.getenv('TOKEN')
-guild_id = int(os.getenv('GUILD_ID'))
-channel_id = int(os.getenv('CHANNEL_ID'))
+guild_id = os.getenv('GUILD_ID')
+channel_id = os.getenv('CHANNEL_ID')
 
 async def retry(fn, *a, **k):
     for i in range(3):
