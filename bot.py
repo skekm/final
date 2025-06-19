@@ -2,7 +2,7 @@ import discord, asyncio, os, math, time, sys
 from datetime import datetime, timezone
 
 token = os.getenv('TOKEN')
-guild_id = 1382434954213855352
+guild_id = os.getenv('GUILD_ID')
 channel_id = 1382831049381511258
 
 async def retry(fn, *a, **k):
@@ -24,7 +24,7 @@ class Client(discord.Client):
             wt = 120 - lb
 
             if lb < 120:
-                if wt > 15:
+                if wt > 30:
                     await c.send(f"cant wait: {wt} mins left")
                     sys.exit()
                 await c.send(f"waiting: {wt} min(s)")
@@ -38,7 +38,5 @@ class Client(discord.Client):
         except Exception as e:
             print(f"final fail: {e}")
         sys.exit()
-
-Client().run(token)
 
 Client().run(token)
