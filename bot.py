@@ -24,7 +24,7 @@ class Client(discord.Client):
             wt = 120 - lb
 
             if lb < 120:
-                if wt > 30:
+                if wt > 60:
                     await c.send(f"cant wait: {wt} mins left")
                     sys.exit()
                 await c.send(f"waiting: {wt} min(s)")
