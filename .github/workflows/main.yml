@@ -11,6 +11,8 @@ jobs:
 
     env:
       TOKEN: ${{ secrets.TOKEN }}
+      GUILD_ID: ${{ secrets.GUILD_ID }}
+      CHANNEL_ID: ${{ secrets.CHANNEL_ID }}
 
     steps:
       - uses: actions/checkout@v3
