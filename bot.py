@@ -25,9 +25,9 @@ class Client(discord.Client):
 
             if lb < 120:
                 if wt > 120:
-                    await c.send(f"cant wait: {wt} mins left")
+                    #await c.send(f"cant wait: {wt} mins left")
                     sys.exit()
-                await c.send(f"waiting: {wt} min(s)")
+                #await c.send(f"waiting: {wt} min(s)")
                 await asyncio.sleep(wt * 60)
             
             cmds = await retry(c.application_commands)
