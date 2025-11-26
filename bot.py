@@ -22,24 +22,24 @@ class Client(discord.Client):
                 g = await retry(self.fetch_guild, guild_id)
                 c = await retry(g.fetch_channel, channel_id)
 
-                lm = [m async for m in c.history(limit=2) if m.author.bot][0]
-                lb = math.floor((datetime.now(timezone.utc) - lm.created_at).total_seconds() / 60)
-                wt = 120 - lb
+                lm = next((m async for m in c.history(limit=2) if m.author.bot), None)
+                if lm is None:
+                    # no last bot message — proceed to bump immediately
+                    pass
+                else:
+                    lb = math.floor((datetime.now(timezone.utc) - lm.created_at).total_seconds() / 60)
+                    wt = 120 - lb
 
-                if lb < 120:
-                    if wt > 120:
-                        sys.exit()
-                    await asyncio.sleep(wt * 60)
+                    if lb < 120:
+                        if wt > 120:
+                            sys.exit()
+                        await asyncio.sleep(wt * 60)
 
                 cmds = await retry(c.application_commands)
                 bump = next((cmd for cmd in cmds if cmd.name=="bump"), None)
                 if not bump: raise Exception("bump missing")
                 await retry(bump.__call__, channel=c)
-
-                if idx == 0:
-                    await asyncio.sleep(31 * 60)
-                else:
-                    await asyncio.sleep(30 * 60)
+                await asyncio.sleep(31 * 60)
 
         except Exception as e:
             print(f"final fail: {e}")
