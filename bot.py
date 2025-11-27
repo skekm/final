@@ -35,8 +35,6 @@ class Client(discord.Client):
                     print(f"Last bot message was {lb} minutes ago. Waiting {wt} minutes until next bump.")
 
                     if lb < 120:
-                        if wt > 120:
-                            sys.exit()
                         await asyncio.sleep(wt * 60)
 
                 cmds = await retry(c.application_commands)
@@ -51,3 +49,4 @@ class Client(discord.Client):
         sys.exit()
 
 Client().run(token)
+
