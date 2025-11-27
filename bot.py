@@ -22,13 +22,17 @@ class Client(discord.Client):
                 g = await retry(self.fetch_guild, guild_id)
                 c = await retry(g.fetch_channel, channel_id)
 
+                print(f"Working on guild: {g.name} (ID: {guild_id}), channel: {c.name} (ID: {channel_id})")
+
                 lm = next((m async for m in c.history(limit=2) if m.author.bot), None)
                 if lm is None:
                     # no last bot message — proceed to bump immediately
-                    pass
+                    print("No previous bot message found, proceeding to bump immediately.")
+                    wt = 0
                 else:
                     lb = math.floor((datetime.now(timezone.utc) - lm.created_at).total_seconds() / 60)
                     wt = 120 - lb
+                    print(f"Last bot message was {lb} minutes ago. Waiting {wt} minutes until next bump.")
 
                     if lb < 120:
                         if wt > 120:
@@ -39,6 +43,7 @@ class Client(discord.Client):
                 bump = next((cmd for cmd in cmds if cmd.name=="bump"), None)
                 if not bump: raise Exception("bump missing")
                 await retry(bump.__call__, channel=c)
+                print("Bump command executed.")
                 await asyncio.sleep(31 * 60)
 
         except Exception as e:
