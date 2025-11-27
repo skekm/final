@@ -34,7 +34,13 @@ class Client(discord.Client):
 
                 logger.info(f"Working on guild: {g.name} (ID: {guild_id}), channel: {c.name} (ID: {channel_id})")
 
-                lm = next((m async for m in c.history(limit=2) if m.author.bot), None)
+                # <-- FIXED: can't call next() on an async generator; use async for to get first bot message
+                lm = None
+                async for m in c.history(limit=2):
+                    if m.author.bot:
+                        lm = m
+                        break
+
                 if lm is None:
                     logger.info("No previous bot message found, proceeding to bump immediately.")
                     wt = 0
@@ -51,7 +57,7 @@ class Client(discord.Client):
 
                 cmds = await retry(c.application_commands)
                 bump = next((cmd for cmd in cmds if cmd.name=="bump"), None)
-                if not bump: 
+                if not bump:
                     raise Exception("bump missing")
                 await retry(bump.__call__, channel=c)
                 logger.info("Bump command executed.")
