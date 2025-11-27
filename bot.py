@@ -52,4 +52,7 @@ class Client(discord.Client):
                 await asyncio.sleep(31 * 60)
 
         except Exception as e:
-            logger.error(f"fin
+            logger.error(f"final fail: {e}")
+        sys.exit()
+
+Client().run(token)
